@@ -1,0 +1,59 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v1",
+        "update_url": null
+    },
+    "exported_at": "2021-12-06T23:16:18-08:00",
+    "name": "Typescript Yarn",
+    "author": "erve2005@gmail.com",
+    "description": null,
+    "features": null,
+    "images": [
+        "quay.io\/parkervcp\/pterodactyl-images:debian_nodejs-16"
+    ],
+    "file_denylist": [],
+    "startup": "git fetch --all && git reset --hard {{GHBRANCH}} && yarn install && yarn build && yarn start",
+    "config": {
+        "files": "{}",
+        "startup": "{\r\n    \"done\": \"Started\",\r\n    \"userInteraction\": []\r\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "apt update\r\napt install curl git -y\r\n# Create initial directories\r\nmkdir -p \/mnt\/server\r\ncd \/mnt\/server\r\n# Set up Git\r\ngit config --global user.name \"\"\r\ngit config --global user.email \"\"\r\ngit config -l\r\n# Clone the Repo\r\ngit clone ${GHREPO} .\r\ngit checkout -t ${GHBRANCH}\r\n# Setup config.json\r\nmv config.json.example config.json\r\n# Install Yarn Dependacies\r\nyarn install\r\n# Build TS Project\r\nyarn build",
+            "container": "debian:buster-slim",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Github Repository",
+            "description": "",
+            "env_variable": "GHREPO",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": false,
+            "rules": "required|string|url"
+        },
+        {
+            "name": "Github Branch",
+            "description": "",
+            "env_variable": "GHBRANCH",
+            "default_value": "origin\/main",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:20"
+        },
+        {
+            "name": "Log Level",
+            "description": "",
+            "env_variable": "CONSOLA_LEVEL",
+            "default_value": "3",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|numeric|min:0|max:6"
+        }
+    ]
+}
